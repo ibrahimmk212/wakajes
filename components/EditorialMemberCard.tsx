@@ -13,7 +13,7 @@ const EditorialMemberCard: React.FC<MemberProps> = ({
   name,
   affiliation,
   country,
-}) => {
+}: MemberProps) => {
   return (
     <div className="bg-white border border-gray-100 rounded-lg shadow-md p-3 flex flex-col hover:shadow-xl transition-shadow duration-300">
       <h3 className="font-bold text-gray-700">{name}</h3>
