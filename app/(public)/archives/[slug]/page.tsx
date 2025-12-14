@@ -3,11 +3,42 @@ import { getIssueBySlug } from "@/lib/data";
 import ArticleListItem from "@/components/ArticleListItem";
 import { BookOpen, Calendar, Layers, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next/types";
 
 // Define the component props based on the dynamic segment name
 interface IssuePageProps {
   params: {
     slug: string; // e.g., 'v8i2'
+  };
+}
+
+// 🎯 DYNAMIC METADATA SETUP
+export async function generateMetadata({
+  params,
+}: IssuePageProps): Promise<Metadata> {
+  const issueData = await getIssueBySlug(params.slug);
+
+  if (!issueData) {
+    return {
+      title: "Issue Not Found",
+      description: "The requested journal issue could not be found.",
+    };
+  }
+
+  const title = `Archive | Volume ${issueData.volume}, Issue ${issueData.issue} (${issueData.year})`;
+  const description = `Full archive of articles from IJASSW, Volume ${issueData.volume}, Issue ${issueData.issue}, published ${issueData.publicationDate}.`;
+
+  return {
+    title: title,
+    description: description,
+    openGraph: {
+      title: title,
+      description: description,
+      url: `https://www.ijassw-journal.com/archives/${params.slug}`,
+    },
+    // The canonical link is essential here to prevent duplicate content issues
+    // if your archives page has multiple ways to be accessed.
+    // canonical: `https://www.ijassw-journal.com/archives/${params.slug}`,
   };
 }
 

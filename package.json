@@ -9,8 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "cloudinary": "^2.8.0",
     "lucide-react": "^0.561.0",
     "next": "16.0.10",
+    "next-cloudinary": "^6.17.5",
     "react": "19.2.1",
     "react-dom": "19.2.1"
   },
