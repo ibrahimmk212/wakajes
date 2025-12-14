@@ -7,7 +7,6 @@ import { revalidatePath } from "next/cache";
 // This function will run securely on the server
 // app/actions.ts (UPDATED for Cloudinary Widget Integration)
 
-("use server");
 // You no longer need to import 'cloudinary' or 'bufferToDataUrl' in this specific action
 // as the client handled the upload. You still need prisma, etc.
 
