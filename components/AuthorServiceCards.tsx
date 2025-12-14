@@ -24,7 +24,7 @@ export default function AuthorServiceCards() {
       title: "Call for Paper",
       description:
         "Submit your original research and contribute to advancing global knowledge.",
-      href: "/call-for-paper",
+      href: "/paper-submission",
     },
     {
       icon: "⬆️",
