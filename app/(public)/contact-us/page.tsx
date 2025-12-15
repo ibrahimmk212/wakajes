@@ -5,7 +5,7 @@ import ContactForm from "@/components/ContactForm";
 import { Mail, Phone, MapPin, Building2, Clock } from "lucide-react";
 
 // Reusable component for displaying contact details
-const ContactInfoCard = ({
+const AddressCard = ({
   title,
   icon: Icon,
   detail,
@@ -23,6 +23,33 @@ const ContactInfoCard = ({
       <p className="text-sm">{detail}</p>
     </div>
   </a>
+);
+
+const ContactInfoCard = ({
+  title,
+  icon: Icon,
+  details,
+  phone,
+  email,
+  className = "text-gray-700",
+}: any) => (
+  <div
+    className={`flex items-start space-x-4 p-4 rounded-lg bg-gray-100 hover:bg-gray-200 transition ${className}`}
+  >
+    <Icon size={24} className="flex-shrink-0 text-blue-600 mt-1" />
+    <div>
+      <p className="font-semibold text-gray-900 p-2">{title}</p>
+      {details?.map((detail: any) => {
+        return (
+          <p key={detail} className="text-xs">
+            {detail}
+          </p>
+        );
+      })}
+      <p className="text-sm">{phone}</p>
+      <p className="text-sm">{email}</p>
+    </div>
+  </div>
 );
 
 export default function ContactUsPage() {
@@ -48,35 +75,31 @@ export default function ContactUsPage() {
             </h3>
 
             <ContactInfoCard
-              title="Editorial Office"
+              title="Editorial Office & Registration"
               icon={Mail}
-              detail="For paper status, peer review, and academic questions."
-              link="mailto:editor@ijassw.com"
+              details={[
+                "For paper status, peer review, and academic questions.",
+                "For payment verification and fee details.",
+              ]}
+              phone="+2348065486735"
+              email="ijassworld@gmail.com"
               className="hover:shadow-md"
             />
 
             <ContactInfoCard
               title="Technical Support"
               icon={Phone}
-              detail="For website issues, form errors, or system access."
-              link="mailto:support@ijassw.com"
-              className="hover:shadow-md"
-            />
-
-            <ContactInfoCard
-              title="Accounts & Registration"
-              icon={Building2}
-              detail="For payment verification and fee details."
-              link="mailto:accounts@ijassw.com"
+              details={["For website issues, form errors, or system access."]}
+              phone="+2348107190253"
+              email="ijassworld@gmail.com"
               className="hover:shadow-md"
             />
 
             {/* Address Placeholder */}
-            <ContactInfoCard
+            <AddressCard
               title="Our Office"
               icon={MapPin}
-              detail="International Journal of Arts and Social Sciences, Global Research Hub, City Center, 10001"
-              link="#"
+              detail="College of Education, Waka-Biu, Borno State, Nigeria, PMB 1502"
               className="hover:shadow-md"
             />
 
