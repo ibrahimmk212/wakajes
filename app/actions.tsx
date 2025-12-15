@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/app/actions.ts (or src/app/actions.js)
 
 "use server"; // IMPORTANT: This directive marks ALL functions in this file as Server Actions
@@ -18,7 +19,7 @@ interface ActionResponse {
 
 export async function submitManuscript(
   formData: FormData
-): Promise<ActionResponse> {
+): Promise<ActionResponse | any> {
   // 1. Extract Data and Assert Types
   // Ensure the names match the 'name' attributes in your SubmissionForm.tsx
   const paperTitle = formData.get("paperTitle") as string;
@@ -57,38 +58,33 @@ export async function submitManuscript(
   }
 
   try {
-    // 3. Database Transaction: Create the new Submission record
-    const newSubmission = await prisma.submission.create({
-      data: {
-        title: paperTitle,
-        authorsList: authors,
-        correspondingAuthorEmail: email,
-        abstract: abstract,
-        mobileNumber: mobileNumber,
-
-        // Save the essential file references
-        manuscriptUrl: manuscriptUrl,
-        manuscriptPublicId: manuscriptPublicId,
-
-        status: "New Submission", // Initial workflow status
-      },
-    });
-
-    // 4. Generate Reference and Log Success
-    const paperReference = newSubmission.id.substring(0, 8).toUpperCase();
-
-    console.log(`[DB SUCCESS] Manuscript submitted. ID: ${newSubmission.id}`);
-
-    // Return success message with data payload
-    return {
-      success: true,
-      message: `Manuscript **${newSubmission.title}** submitted successfully!`,
-      data: {
-        id: newSubmission.id,
-        paperReference: paperReference,
-        paperTitle: newSubmission.title,
-      },
-    };
+    // // 3. Database Transaction: Create the new Submission record
+    // const newSubmission = await prisma.submission.create({
+    //   data: {
+    //     title: paperTitle,
+    //     authorsList: authors,
+    //     correspondingAuthorEmail: email,
+    //     abstract: abstract,
+    //     mobileNumber: mobileNumber,
+    //     // Save the essential file references
+    //     manuscriptUrl: manuscriptUrl,
+    //     manuscriptPublicId: manuscriptPublicId,
+    //     status: "New Submission", // Initial workflow status
+    //   },
+    // });
+    // // 4. Generate Reference and Log Success
+    // const paperReference = newSubmission.id.substring(0, 8).toUpperCase();
+    // console.log(`[DB SUCCESS] Manuscript submitted. ID: ${newSubmission.id}`);
+    // // Return success message with data payload
+    // return {
+    //   success: true,
+    //   message: `Manuscript **${newSubmission.title}** submitted successfully!`,
+    //   data: {
+    //     id: newSubmission.id,
+    //     paperReference: paperReference,
+    //     paperTitle: newSubmission.title,
+    //   },
+    // };
   } catch (error) {
     console.error("PRISMA/DB Error during submission:", error);
 

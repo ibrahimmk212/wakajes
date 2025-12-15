@@ -28,7 +28,7 @@ interface SettingsData {
 
 interface ActionState {
   success: boolean;
-  message: string;
+  message?: string;
 }
 
 // Initial/Mock Data (Fetched from a dedicated 'Settings' table in Prisma)
