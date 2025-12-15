@@ -1,5 +1,5 @@
 // app/(admin)/dashboard/analytics/page.tsx (Server Component)
-import { getJournalMetrics } from "@/lib/admin-data";
+// import { getJournalMetrics } from "@/lib/admin-data";
 import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
 import { BarChart3, Clock, TrendingUp, Users } from "lucide-react";
 
