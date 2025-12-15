@@ -37,17 +37,6 @@ export default function JournalList() {
       imageSrc: "/images/journal-1.png",
       link: "/paper-submission?journal=IJAR",
     },
-    {
-      title: "Journal of Emerging Science & Tech",
-      imageSrc: "/images/journal-1.png",
-      link: "/paper-submission?journal=JEST",
-    },
-    {
-      title: "Global Research & Innovation Journal - Physics",
-      imageSrc: "/images/journal-1.png",
-      link: "/paper-submission?journal=GRIJP",
-    },
-    // ... add more journals
   ];
 
   return (

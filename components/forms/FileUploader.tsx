@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/components/forms/FileUploader.tsx (UPDATED for Cloudinary Widget)
 "use client";
 
@@ -54,7 +55,7 @@ export default function FileUploader({
                 "ijassw_upload"
               }
               options={{ resourceType: "raw" }}
-              onSuccess={(result, { widget }) => {
+              onSuccess={(result: any, { widget }) => {
                 if (result.event === "success") {
                   setFileUrl(result.info.secure_url);
                   setFilePublicId(result.info.public_id);
@@ -82,7 +83,7 @@ export default function FileUploader({
               "ijassw_upload"
             }
             options={{ resourceType: "raw" }}
-            onSuccess={(result, { widget }) => {
+            onSuccess={(result: any, { widget }) => {
               if (result.event === "success") {
                 setFileUrl(result.info.secure_url);
                 setFilePublicId(result.info.public_id);

@@ -4,26 +4,34 @@
 
 import { revalidatePath } from "next/cache";
 
-// This function will run securely on the server
-// app/actions.ts (UPDATED for Cloudinary Widget Integration)
+interface ActionResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    id: string;
+    paperReference: string;
+    paperTitle: string;
+  };
+}
 
-// You no longer need to import 'cloudinary' or 'bufferToDataUrl' in this specific action
-// as the client handled the upload. You still need prisma, etc.
+// ... (rest of the file remains the same until the success block) ...
 
 export async function submitManuscript(
   formData: FormData
-): Promise<{ success: boolean; message: string }> {
-  // 1. Get data from the form
+): Promise<ActionResponse> {
+  // 1. Extract Data and Assert Types
+  // Ensure the names match the 'name' attributes in your SubmissionForm.tsx
   const paperTitle = formData.get("paperTitle") as string;
   const authors = formData.get("authors") as string;
   const email = formData.get("email") as string;
   const abstract = formData.get("abstract") as string;
+  const mobileNumber = formData.get("mobileNumber") as string | null;
 
-  // 🎯 NEW: Retrieve the URL and Public ID from the hidden inputs
+  // File references from the hidden inputs updated by the FileUploader/Cloudinary Widget
   const manuscriptUrl = formData.get("manuscriptUrl") as string;
   const manuscriptPublicId = formData.get("manuscriptPublicId") as string;
 
-  // 2. Validation
+  // 2. Comprehensive Validation
   if (
     !paperTitle ||
     !authors ||
@@ -35,46 +43,59 @@ export async function submitManuscript(
     return {
       success: false,
       message:
-        "Missing required form fields or the manuscript file was not uploaded to Cloudinary.",
+        "Missing required submission details. Please ensure all text fields are filled and the manuscript file is successfully uploaded.",
+    };
+  }
+
+  // Basic email format check (optional, but recommended)
+  if (!email.includes("@") || !email.includes(".")) {
+    return {
+      success: false,
+      message:
+        "The email address provided is invalid. Please enter a correct email.",
     };
   }
 
   try {
-    // 3. Database Record Creation (Prisma/PostgreSQL)
-    // You would perform your database logic here.
-    /*
-        const newSubmission = await prisma.submission.create({
-            data: {
-                title: paperTitle,
-                authorsList: authors,
-                correspondingAuthorEmail: email,
-                abstract: abstract,
-                manuscriptUrl: manuscriptUrl,          // Save URL from hidden input
-                manuscriptPublicId: manuscriptPublicId, // Save Public ID from hidden input
-                status: 'New Submission',
-                // other fields...
-            }
-        });
-        */
+    // 3. Database Transaction: Create the new Submission record
+    const newSubmission = await prisma.submission.create({
+      data: {
+        title: paperTitle,
+        authorsList: authors,
+        correspondingAuthorEmail: email,
+        abstract: abstract,
+        mobileNumber: mobileNumber,
 
-    // MOCK SUCCESS
-    const paperRef = `IJASSW-2026-${Math.floor(Math.random() * 100)}`;
+        // Save the essential file references
+        manuscriptUrl: manuscriptUrl,
+        manuscriptPublicId: manuscriptPublicId,
 
-    console.log(
-      `[Submission Action]: Database record created with URL: ${manuscriptUrl}`
-    );
+        status: "New Submission", // Initial workflow status
+      },
+    });
 
+    // 4. Generate Reference and Log Success
+    const paperReference = newSubmission.id.substring(0, 8).toUpperCase();
+
+    console.log(`[DB SUCCESS] Manuscript submitted. ID: ${newSubmission.id}`);
+
+    // Return success message with data payload
     return {
       success: true,
-      message: `Manuscript submitted successfully! Your tracking reference is **${paperRef}**.`,
+      message: `Manuscript **${newSubmission.title}** submitted successfully!`,
+      data: {
+        id: newSubmission.id,
+        paperReference: paperReference,
+        paperTitle: newSubmission.title,
+      },
     };
   } catch (error) {
-    console.error("Submission failed:", error);
-    // NOTE: If the DB fails, the file is already on Cloudinary.
-    // A robust app would use the public ID to delete the file here.
+    console.error("PRISMA/DB Error during submission:", error);
+
+    // Return generic server error message
     return {
       success: false,
-      message: `Submission failed due to a server error.`,
+      message: `Submission failed due to a server error. Please try again. If the issue persists, contact support.`,
     };
   }
 }
@@ -85,6 +106,8 @@ export async function submitRegistrationPayment(formData: FormData) {
   const paperReference = formData.get("paperReference") as string;
   const transactionRef = formData.get("transactionRef") as string;
   const payerName = formData.get("payerName") as string;
+
+  console.log({ paymentSlipFile, paperReference, transactionRef, payerName });
 
   // 2. VALIDATION
   if (!paymentSlipFile || !paperReference || !transactionRef || !payerName) {

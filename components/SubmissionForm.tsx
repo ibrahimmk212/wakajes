@@ -1,16 +1,55 @@
 // src/components/SubmissionForm.tsx
 "use client";
 
-import React, { useActionState } from "react"; // 🎯 CHANGE 1: Use 'useActionState' hook
+import React, { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Add this import
 import { Loader2, CheckCircle, XCircle, UploadCloud } from "lucide-react";
-import { useFormStatus } from "react-dom"; // Keep this one, it's correct
+import { useFormStatus } from "react-dom";
 
 import InputText from "./forms/InputText";
 import Textarea from "./forms/TextArea";
 import FileUploader from "./forms/FileUploader";
-import { submitManuscript } from "@/app/actions";
+import { submitManuscript } from "@/app/actions"; // Your server action
 
-// --- Helper Component for Status Management (No change needed here) ---
+// Define the shape of the state (matches your ActionResponse interface)
+interface ActionState {
+  success: boolean;
+  message: string;
+  data?: {
+    id: string;
+    paperReference: string;
+    paperTitle: string;
+  };
+}
+
+// Render a success or error message after submission attempt
+const StatusMessage = ({ state }: { state: ActionState }) => {
+  // 🎯 Added state prop
+  if (!state.message) return null;
+
+  // Only show the message if it's an error (Success triggers a redirect)
+  if (state.success) return null;
+
+  const Icon = XCircle;
+  const colorClass = "bg-red-100 text-red-800 border-red-400";
+
+  return (
+    <div
+      className={`p-4 mb-6 border rounded-lg flex items-start space-x-3 ${colorClass}`}
+    >
+      <Icon size={24} className="flex-shrink-0 mt-0.5" />
+      <div className="flex-grow">
+        <p className="font-semibold">Submission Failed.</p>
+        <p
+          className="text-sm mt-1"
+          dangerouslySetInnerHTML={{ __html: state.message }}
+        />
+      </div>
+    </div>
+  );
+};
+
+// ... (SubmitButton component remains the same) ...
 function SubmitButton() {
   const { pending } = useFormStatus();
 
@@ -35,47 +74,34 @@ function SubmitButton() {
     </button>
   );
 }
+// -------------------------------------------------------------------
 
 // --- Main Form Component ---
 export default function SubmissionForm() {
-  const initialState = { success: false, message: "" };
+  const initialState: ActionState = { success: false, message: "" };
+  const router = useRouter(); // Initialize router
 
-  // 🎯 CHANGE 2: Replace useFormState with useActionState
-  const [state, formAction] = useActionState(submitManuscript, initialState);
+  // 🎯 THE CRITICAL FIX: The wrapper function handles the two arguments (prevState, formData)
+  // and only passes the required formData to your Server Action.
+  const [state, formAction] = useActionState<ActionState, FormData>(
+    async (prevState, formData) => {
+      return submitManuscript(formData);
+    },
+    initialState
+  );
 
-  // Render a success or error message after submission attempt
-  const StatusMessage = () => {
-    if (!state.message) return null;
+  // 🎯 EFFECT FOR REDIRECTION
+  useEffect(() => {
+    if (state.success && state.data) {
+      const params = new URLSearchParams({
+        ref: state.data.paperReference,
+        title: state.data.paperTitle,
+      }).toString();
 
-    const isSuccess = state.success;
-    const Icon = isSuccess ? CheckCircle : XCircle;
-    const colorClass = isSuccess
-      ? "bg-green-100 text-green-800 border-green-400"
-      : "bg-red-100 text-red-800 border-red-400";
-
-    return (
-      <div
-        className={`p-4 mb-6 border rounded-lg flex items-start space-x-3 ${colorClass}`}
-      >
-        <Icon size={24} className="flex-shrink-0 mt-0.5" />
-        <div className="flex-grow">
-          <p className="font-semibold">
-            {isSuccess ? "Submission Successful!" : "Submission Failed."}
-          </p>
-          <p
-            className="text-sm mt-1"
-            dangerouslySetInnerHTML={{ __html: state.message }}
-          />
-          {isSuccess && (
-            <p className="text-xs mt-2 font-medium">
-              Please check your email shortly for confirmation and tracking
-              details.
-            </p>
-          )}
-        </div>
-      </div>
-    );
-  };
+      // Redirect to the success page
+      router.push(`/submission/success?${params}`);
+    }
+  }, [state, router]);
 
   return (
     <div className="max-w-3xl mx-auto bg-white p-8 md:p-10 rounded-xl shadow-2xl">
@@ -87,10 +113,12 @@ export default function SubmissionForm() {
         file (PDF/DOCX).
       </p>
 
-      <StatusMessage />
+      {/* Pass the state to the message component */}
+      <StatusMessage state={state} />
 
       <form action={formAction} className="space-y-6">
         {/* 1. PAPER DETAILS */}
+        {/* ... (Your existing form inputs) ... */}
         <h2 className="text-xl font-semibold mb-2 pt-4 border-t">
           Paper Details
         </h2>
@@ -104,7 +132,8 @@ export default function SubmissionForm() {
         <Textarea
           label="Abstract"
           name="abstract"
-          helperText="Provide a concise summary of your research (250 words maximum)."
+          helperText="Provide a concise summary of your research (max 300 words)."
+          rows={5}
         />
 
         {/* 2. AUTHOR & CONTACT */}
@@ -138,9 +167,12 @@ export default function SubmissionForm() {
           Manuscript File
         </h2>
 
+        {/* IMPORTANT: Ensure your FileUploader outputs hidden inputs named manuscriptUrl and manuscriptPublicId */}
         <FileUploader
           label="Attach Research Paper"
-          name="researchPaperFile"
+          name="researchPaperFile" // Not used for data, but good for UX
+          // Add the hidden fields needed by your Server Action
+          // hiddenFields={["manuscriptUrl", "manuscriptPublicId"]}
           maxSizeText="6 MB (.doc, .docx, .pdf)"
         />
 

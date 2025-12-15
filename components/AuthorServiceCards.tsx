@@ -4,18 +4,41 @@ import React from "react";
 import Link from "next/link";
 
 // Assuming a reusable Card component is available (e.g., src/components/Card.tsx)
-const Card = ({ icon, title, description, href }: any) => (
-  <Link
-    href={href}
-    className="block p-6 text-center border rounded-lg shadow-sm hover:shadow-lg transition duration-300 hover:border-blue-500"
-  >
-    <div className="text-4xl text-blue-600 mb-3 mx-auto w-12 h-12 flex items-center justify-center">
-      {icon}
-    </div>
-    <h3 className="text-xl font-semibold mb-2 text-blue-500">{title}</h3>
-    <p className="text-gray-600 text-sm">{description}</p>
-  </Link>
-);
+const Card = ({ icon, title, description, href, target, rel }: any) => {
+  // Determine if it's an internal Next.js route or an external/static file link
+  const isInternalLink = !href.startsWith("http") && target !== "_blank";
+
+  if (isInternalLink) {
+    // Use Next.js Link for internal navigation for performance
+    return (
+      <Link href={href} passHref legacyBehavior>
+        <a className="block p-6 text-center border rounded-lg shadow-sm hover:shadow-lg transition duration-300 hover:border-blue-500">
+          <div className="text-4xl text-blue-600 mb-3 mx-auto w-12 h-12 flex items-center justify-center">
+            {icon}
+          </div>
+          <h3 className="text-xl font-semibold mb-2 text-blue-500">{title}</h3>
+          <p className="text-gray-600 text-sm">{description}</p>
+        </a>
+      </Link>
+    );
+  }
+
+  // For external links or static file downloads (like your PDF)
+  return (
+    <a
+      href={href}
+      target={target} // This is "_blank" for the PDF
+      rel={rel}
+      className="block p-6 text-center border rounded-lg shadow-sm hover:shadow-lg transition duration-300 hover:border-blue-500"
+    >
+      <div className="text-4xl text-blue-600 mb-3 mx-auto w-12 h-12 flex items-center justify-center">
+        {icon}
+      </div>
+      <h3 className="text-xl font-semibold mb-2 text-blue-500">{title}</h3>
+      <p className="text-gray-600 text-sm">{description}</p>
+    </a>
+  );
+};
 
 export default function AuthorServiceCards() {
   const services = [
@@ -46,12 +69,23 @@ export default function AuthorServiceCards() {
       description: "Explore the wide range of articles published in GSJ.",
       href: "/current-edition",
     },
+    // {
+    //   icon: "📄",
+    //   title: "Templates",
+    //   description:
+    //     "Download ready-to-use templates to format your research paper easily.",
+    //   href: "/author-guidelines#downloads",
+    // },
     {
       icon: "📄",
-      title: "Templates",
+      title: "Copyright Forms",
       description:
-        "Download ready-to-use templates to format your research paper easily.",
-      href: "/author-guidelines#downloads",
+        "Access and download copyright transfer forms for your publications.",
+      // docx file in public/docs/copyright_form.pdf
+      // open in new tab
+      href: "/docs/IJASSW_copyright_form.pdf",
+      target: "_blank",
+      rel: "noopener noreferrer",
     },
     {
       icon: "👥",

@@ -30,12 +30,12 @@ export default function PeerReviewSteps() {
         </div>
       ))}
       <div className="mt-6 text-center text-sm text-gray-500 italic">
-        Interested in joining the Peer Review Board? Read your CV or write to{" "}
+        For inquiries about the peer-review process, contact us at{" "}
         <a
           href="mailto:editor@globalscientificjournal.com"
           className="text-blue-500 hover:underline"
         >
-          editor@globalscientificjournal.com
+          ijassworld@gmail.com
         </a>
       </div>
     </div>

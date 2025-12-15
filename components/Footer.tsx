@@ -76,10 +76,10 @@ const Footer: React.FC = () => {
               <div>
                 <p className="text-sm font-semibold">Editorial Office</p>
                 <a
-                  href="mailto:ijassw@gmail.com"
+                  href="mailto:ijassworld@gmail.com"
                   className="text-sm hover:text-white transition"
                 >
-                  ijassw@gmail.com
+                  ijassworld@gmail.com
                 </a>
               </div>
             </div>
@@ -91,16 +91,18 @@ const Footer: React.FC = () => {
               <div>
                 <p className="text-sm font-semibold">Submissions Help</p>
                 <a
-                  href="mailto:ijassw@gmail.com"
+                  href="mailto:ijassworld@gmail.com"
                   className="text-sm hover:text-white transition"
                 >
-                  ijassw@gmail.com
+                  ijassworld@gmail.com
                 </a>
               </div>
             </div>
             <div className="flex items-start space-x-2">
               <MapPin size={16} className="mt-1 text-blue-400 flex-shrink-0" />
-              <p className="text-sm">Global Research Hub, Main Street, 10001</p>
+              <p className="text-sm">
+                College of Education, Waka-Biu, Borno State, Nigeria, PMB 1502
+              </p>
             </div>
           </div>
 

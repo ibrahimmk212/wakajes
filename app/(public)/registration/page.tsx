@@ -54,7 +54,7 @@ export default function RegistrationPage({
                 <div>
                   <p className="text-xs text-gray-500">Account Name</p>
                   <p className="font-semibold text-gray-800">
-                    IJASSW Publications Account
+                    Academic Staff Union COEASU Waka-Biu
                   </p>
                 </div>
               </div>
@@ -63,7 +63,7 @@ export default function RegistrationPage({
               <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-md">
                 <p className="text-xs text-gray-500">Account Number</p>
                 <p className="text-2xl font-extrabold text-blue-700">
-                  1234567890
+                  1012453666
                 </p>
               </div>
 
@@ -79,7 +79,7 @@ export default function RegistrationPage({
             <div className="mt-8 pt-6 border-t border-gray-100">
               <p className="font-bold text-red-600 flex items-center">
                 {/* Naira */}
-                <Clock size={20} className="mr-2" /> Registration Fee: ₦15,000
+                <Clock size={20} className="mr-2" /> Registration Fee: ₦20,000
               </p>
               <p className="text-sm text-gray-500 mt-2">
                 Please ensure the exact fee is transferred and keep the proof of

@@ -5,12 +5,14 @@ interface TextareaProps {
   label: string;
   name: string;
   rows?: number;
+  helperText?: string;
   required?: boolean;
 }
 
 const Textarea: React.FC<TextareaProps> = ({
   label,
   name,
+  helperText,
   rows = 5,
   required = true,
 }) => {
@@ -26,6 +28,7 @@ const Textarea: React.FC<TextareaProps> = ({
         className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 resize-none"
         required={required}
       ></textarea>
+      {helperText && <p className="mt-1 text-sm text-gray-500">{helperText}</p>}
     </div>
   );
 };

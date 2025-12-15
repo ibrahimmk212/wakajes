@@ -4,7 +4,7 @@ import React from "react";
 interface InputTextProps {
   label: string;
   name: string;
-  type?: "text" | "email" | "number";
+  type?: "text" | "email" | "number" | "password" | "tel";
   placeholder?: string;
   helperText?: string;
   required?: boolean;

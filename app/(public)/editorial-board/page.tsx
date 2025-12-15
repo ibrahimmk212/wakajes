@@ -6,40 +6,33 @@ export default function EditorialBoardPage() {
   // In a real app, this data would be fetched from a CMS or Database using a Server Component
   const editorialMembers = [
     {
-      name: "Dr. Milorad Wang",
-      affiliation: "University of Belgrade, Serbia",
-      country: "Serbia",
+      name: "Dr. Habib Hassan",
+      affiliation: "College of Education, Waka-Biu",
+      country: "Nigeria",
       // email: "milorad.wang@university.edu",
     },
     {
-      name: "Dr. P. R. Smith",
-      affiliation: "University of Paris, France",
-      country: "France",
-      // email: "p.r.smith@university.edu",
+      name: "Dr. Mercy B. Wakawa",
+      affiliation: "College of Education, Waka-Biu",
+      country: "Nigeria",
     },
     {
-      name: "Dr. Mathew Goldjohn",
-      affiliation: "University of Lyon, France",
-      country: "France",
+      name: "Mr. Mohammed Y. Tong",
+      affiliation: "College of Education, Waka-Biu",
+      country: "Nigeria",
       // email: "mathew.goldjohn@university.edu",
     },
     {
-      name: "Dr. Ezwan Nassuf",
-      affiliation: "Cairo University, Egypt",
-      country: "Egypt",
+      name: "Dr. Mohammed H. Barka",
+      affiliation: "College of Education, Waka-Biu",
+      country: "Nigeria",
       // email: "ezwan.nassuf@university.edu",
     },
     {
-      name: "Dr. M. Khoss Jabar",
-      affiliation: "University of Malaya, Malaysia",
-      country: "Malaysia",
-      // email: "m.khoss.jabar@university.edu",
-    },
-    {
-      name: "Dr. Farah Mubarak-Godina",
-      affiliation: "University of Lagos, Nigeria",
+      name: "Mr. James B. Ayuba",
+      affiliation: "College of Education, Waka-Biu",
       country: "Nigeria",
-      // email: "farah.mubarak-godina@university.edu",
+      // email: "m.khoss.jabar@university.edu",
     },
     // ... many more members
   ];
