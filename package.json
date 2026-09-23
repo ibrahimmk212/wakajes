@@ -8,14 +8,10 @@
     "dev:server": "tsx server/index.ts",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint",
-    "postinstall": "prisma generate"
+    "lint": "eslint"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.1.0",
-    "@prisma/client": "^7.1.0",
     "@supabase/supabase-js": "^2.116.0",
-    "@types/pg": "^8.16.0",
     "cloudinary": "^2.8.0",
     "concurrently": "^10.0.5",
     "cookie-parser": "^1.4.7",
@@ -23,8 +19,6 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "lucide-react": "^0.561.0",
-    "pg": "^8.16.3",
-    "prisma": "^7.1.0",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-router-dom": "^7.18.4",
