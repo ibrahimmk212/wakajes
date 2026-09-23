@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8faf8;
+  --foreground: #1a2e22;
+  --wakajes-green: #1e4d2b;
+  --wakajes-dark-green: #133e27;
+  --wakajes-light-green: #2d6a4f;
+  --wakajes-gold: #d4af37;
+  --wakajes-bright-gold: #e5a823;
+  --wakajes-tint-gold: #fdf8e8;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}

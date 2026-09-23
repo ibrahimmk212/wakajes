@@ -1,0 +1,56 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Submission {
+  id                   String   @id @default(cuid())
+  title                String
+  authors              String
+  email                String
+  phone                String?
+  abstract             String
+  manuscriptUrl        String
+  manuscriptPublicId   String
+  status               String   @default("New Submission")
+  published            Boolean  @default(false)
+  paperReferenceNumber String?  @unique
+  payerName            String?
+  bankTransactionRef   String?  @unique
+  paymentStatus        String   @default("Pending")
+  paymentSlipUrl       String?
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  @@map("submissions")
+}
+
+model User {
+  id                     String   @id @default(cuid())
+  name                   String?
+  email                  String?  @unique
+  password               String?
+  isDefaultPassword      Boolean  @default(false)
+  isEditorialBoardMember Boolean  @default(false)
+  role                   String   @default("admin")
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("contact_messages")
+}

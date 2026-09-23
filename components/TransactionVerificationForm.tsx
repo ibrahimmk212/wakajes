@@ -1,27 +1,39 @@
-// src/components/TransactionVerificationForm.tsx
-"use client";
-
 import React, { useState } from "react";
-import { submitRegistrationPayment } from "@/app/actions"; // Import the Server Action
 
 export default function TransactionVerificationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState({ message: "", type: "" });
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsSubmitting(true);
     setStatusMessage({ message: "", type: "" });
 
-    // The Server Action is called directly here
-    const result = await submitRegistrationPayment(formData);
+    const formData = new FormData(e.currentTarget);
+    const paperReference = formData.get("paperReference") as string;
+    const transactionRef = formData.get("transactionRef") as string;
+    const payerName = formData.get("payerName") as string;
 
-    if (result.success) {
-      setStatusMessage({ message: result.message, type: "success" });
-    } else {
-      setStatusMessage({ message: result.message, type: "error" });
+    try {
+      const response = await fetch("/api/registration/payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paperReference, transactionRef, payerName }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setStatusMessage({ message: result.message, type: "success" });
+        (e.target as HTMLFormElement).reset();
+      } else {
+        setStatusMessage({ message: result.message || "Verification failed.", type: "error" });
+      }
+    } catch {
+      setStatusMessage({ message: "Network error occurred. Please try again.", type: "error" });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   const statusClass =
@@ -41,18 +53,10 @@ export default function TransactionVerificationForm() {
         </div>
       )}
 
-      <form action={handleSubmit} className="space-y-6">
-        {/* Hidden Field for Paper Reference */}
-        <input type="hidden" name="paperReference" />
-
-        {/* 1. Payment Slip Upload */}
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label
-            htmlFor="paymentSlip"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Upload Payment Proof (Slip / Receipt){" "}
-            <span className="text-red-500">*</span>
+          <label htmlFor="paymentSlip" className="block text-sm font-medium text-gray-700 mb-1">
+            Upload Payment Proof (Slip / Receipt) <span className="text-red-500">*</span>
           </label>
           <input
             type="file"
@@ -67,14 +71,9 @@ export default function TransactionVerificationForm() {
           </p>
         </div>
 
-        {/* 2. Transaction Reference Number */}
         <div>
-          <label
-            htmlFor="transactionRef"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Bank Transaction/Reference Number{" "}
-            <span className="text-red-500">*</span>
+          <label htmlFor="transactionRef" className="block text-sm font-medium text-gray-700 mb-1">
+            Bank Transaction/Reference Number <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -86,14 +85,9 @@ export default function TransactionVerificationForm() {
           />
         </div>
 
-        {/* 3. Payer Name (For verification) */}
         <div>
-          <label
-            htmlFor="payerName"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Payer Name (As it appears on the bank transfer){" "}
-            <span className="text-red-500">*</span>
+          <label htmlFor="payerName" className="block text-sm font-medium text-gray-700 mb-1">
+            Payer Name (As it appears on the bank transfer) <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -104,18 +98,15 @@ export default function TransactionVerificationForm() {
           />
         </div>
 
-        {/* 4. Paper Reference Number */}
         <div>
-          <label
-            htmlFor="paperReference"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="paperReference" className="block text-sm font-medium text-gray-700 mb-1">
             Paper Reference Number <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             id="paperReference"
             name="paperReference"
+            required
             className="w-full p-2 border border-gray-300 rounded-md text-gray-800"
           />
         </div>
@@ -123,7 +114,7 @@ export default function TransactionVerificationForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           {isSubmitting ? "Verifying..." : "Submit Payment Verification"}
         </button>

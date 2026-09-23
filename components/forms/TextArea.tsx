@@ -7,6 +7,7 @@ interface TextareaProps {
   rows?: number;
   helperText?: string;
   required?: boolean;
+  placeholder?: string;
 }
 
 const Textarea: React.FC<TextareaProps> = ({
@@ -15,6 +16,7 @@ const Textarea: React.FC<TextareaProps> = ({
   helperText,
   rows = 5,
   required = true,
+  placeholder,
 }) => {
   return (
     <div className="mb-6">
@@ -25,7 +27,8 @@ const Textarea: React.FC<TextareaProps> = ({
         id={name}
         name={name}
         rows={rows}
-        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 resize-none"
+        placeholder={placeholder}
+        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-[#133e27] focus:border-[#133e27] resize-none"
         required={required}
       ></textarea>
       {helperText && <p className="mt-1 text-sm text-gray-500">{helperText}</p>}

@@ -3,7 +3,7 @@
 "use client";
 
 import React from "react";
-import { JournalMetrics } from "@/lib/admin-data"; // Import type
+import { JournalMetrics } from "../../lib/admin-data"; // Import type
 import { FileText, CheckCircle, Clock, Users, Zap } from "lucide-react";
 
 interface AnalyticsDashboardProps {

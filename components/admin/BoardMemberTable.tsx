@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// src/components/admin/BoardMemberTable.tsx (Client Component)
-"use client";
-
 import React, { useState, useMemo } from "react";
 import {
   UserPlus,
@@ -17,16 +13,16 @@ import {
 const MemberFormModal = ({ member, onClose, onSubmit }: any) => {
   const [formData, setFormData] = useState({
     name: member?.name || "",
-    title: member?.title || "",
+    title: member?.title || "Dr.",
     email: member?.email || "",
-    role: member?.role || "Reviewer",
+    role: member?.role || "Editorial Member",
     active: member?.active ?? true,
   });
 
   const roles = [
-    "Editorial Chief",
-    "Associate Editor",
-    "Section Editor",
+    "Editor-in-Chief",
+    "Secretary (Ag)",
+    "Editorial Member",
     "Reviewer",
   ];
 
@@ -44,60 +40,57 @@ const MemberFormModal = ({ member, onClose, onSubmit }: any) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg p-8">
-        <h3 className="text-2xl font-bold mb-6 text-gray-800">
-          {member ? "Edit Member" : "Add New Member"}
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 border-t-4 border-[#133e27]">
+        <h3 className="text-xl font-extrabold mb-6 text-[#133e27]">
+          {member ? "Edit Board Member" : "Add Board Member"}
         </h3>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+          <div className="grid grid-cols-3 gap-3">
             <label className="block">
-              <span className="text-sm font-medium text-gray-700">
-                Full Name *
-              </span>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border rounded-lg"
-              />
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700">
-                Title (e.g., Prof., Dr.) *
-              </span>
+              <span className="font-bold text-gray-700 uppercase tracking-wider">Title *</span>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
                 required
-                className="w-full p-2 border rounded-lg"
+                placeholder="Dr. / Prof. / Mr."
+                className="w-full p-2.5 border rounded-xl"
+              />
+            </label>
+            <label className="block col-span-2">
+              <span className="font-bold text-gray-700 uppercase tracking-wider">Full Name *</span>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full p-2.5 border rounded-xl"
               />
             </label>
           </div>
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Email *</span>
+            <span className="font-bold text-gray-700 uppercase tracking-wider">Email Address *</span>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full p-2 border rounded-lg"
+              className="w-full p-2.5 border rounded-xl"
             />
           </label>
           <label className="block">
-            <span className="text-sm font-medium text-gray-700">Role *</span>
+            <span className="font-bold text-gray-700 uppercase tracking-wider">Board Role *</span>
             <select
               name="role"
               value={formData.role}
               onChange={handleChange}
               required
-              className="w-full p-2 border rounded-lg bg-white"
+              className="w-full p-2.5 border rounded-xl bg-white"
             >
               {roles.map((r) => (
                 <option key={r} value={r}>
@@ -112,26 +105,24 @@ const MemberFormModal = ({ member, onClose, onSubmit }: any) => {
               name="active"
               checked={formData.active}
               onChange={handleChange}
-              className="h-4 w-4 text-blue-600 rounded"
+              className="h-4 w-4 text-[#133e27] rounded"
             />
-            <span className="text-sm font-medium text-gray-700">
-              Account Active (Can log in)
-            </span>
+            <span className="font-bold text-gray-700">Active Editorial Status</span>
           </label>
 
-          <div className="flex justify-end space-x-3 pt-6">
+          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
             <button
               type="button"
               onClick={onClose}
-              className="py-2 px-4 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+              className="py-2.5 px-4 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="py-2.5 px-5 bg-[#133e27] text-white font-bold rounded-xl hover:bg-[#1e4d2b] transition"
             >
-              {member ? "Save Changes" : "Add Member"}
+              {member ? "Save Member" : "Add Member"}
             </button>
           </div>
         </form>
@@ -141,53 +132,39 @@ const MemberFormModal = ({ member, onClose, onSubmit }: any) => {
 };
 
 export default function BoardMemberTable({ initialMembers }: any) {
-  const [members, setMembers] = useState(initialMembers);
+  const [members, setMembers] = useState(initialMembers || []);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("All");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState(null);
 
-  // --- Data Processing ---
   const roles = [
     "All",
-    "Editorial Chief",
-    "Associate Editor",
-    "Section Editor",
+    "Editor-in-Chief",
+    "Secretary (Ag)",
+    "Editorial Member",
     "Reviewer",
   ];
 
   const filteredMembers = useMemo(() => {
-    return members
-      .filter((member: any) => {
-        const matchesSearch =
-          member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          member.email.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesRole = filterRole === "All" || member.role === filterRole;
-        return matchesSearch && matchesRole;
-      })
-      .sort((a: any, b: any) => {
-        // Sort by role precedence for display
-        return roles.indexOf(a.role) - roles.indexOf(b.role);
-      });
+    return members.filter((member: any) => {
+      const matchesSearch =
+        (member.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (member.email || "").toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesRole = filterRole === "All" || member.role === filterRole;
+      return matchesSearch && matchesRole;
+    });
   }, [members, searchTerm, filterRole]);
 
-  // --- Server Action Handlers (Placeholders) ---
-  const handleAddEdit = async (id: any, data: any) => {
-    // 🎯 Call Server Action: addOrUpdateBoardMember(id, data);
-    console.log(`Submitting member data: ID=${id}, Data:`, data);
-
+  const handleAddEdit = (id: any, data: any) => {
     if (id) {
-      // Edit existing
-      setMembers(
-        members.map((m: any) => (m.id === id ? { ...m, ...data } : m))
-      );
+      setMembers(members.map((m: any) => (m.id === id ? { ...m, ...data } : m)));
     } else {
-      // Add new
       const newMember = {
         ...data,
         id: Date.now(),
-        joinedDate: new Date().toISOString().split("T")[0],
+        joinedDate: "2026-01-01",
       };
       setMembers([newMember, ...members]);
     }
@@ -195,8 +172,7 @@ export default function BoardMemberTable({ initialMembers }: any) {
     setEditingMember(null);
   };
 
-  const handleToggleActive = async (id: any, currentStatus: any) => {
-    // 🎯 Call Server Action: toggleMemberStatus(id, !currentStatus);
+  const handleToggleActive = (id: any, currentStatus: any) => {
     setMembers(
       members.map((m: any) =>
         m.id === id ? { ...m, active: !currentStatus } : m
@@ -204,24 +180,19 @@ export default function BoardMemberTable({ initialMembers }: any) {
     );
   };
 
-  const handleDelete = async (id: any) => {
-    if (
-      !confirm("Are you sure you want to permanently delete this board member?")
-    )
-      return;
-    // 🎯 Call Server Action: deleteBoardMember(id);
+  const handleDelete = (id: any) => {
+    if (!confirm("Are you sure you want to remove this board member?")) return;
     setMembers(members.filter((m: any) => m.id !== id));
   };
 
-  // --- Render Logic ---
   const RoleBadge = ({ role }: any) => (
     <span
-      className={`px-3 py-1 text-xs font-semibold rounded-full ${
+      className={`px-3 py-1 text-xs font-bold rounded-full ${
         role.includes("Chief")
-          ? "bg-red-100 text-red-800"
-          : role.includes("Editor")
-          ? "bg-purple-100 text-purple-800"
-          : "bg-teal-100 text-teal-800"
+          ? "bg-[#133e27] text-white"
+          : role.includes("Secretary")
+          ? "bg-amber-100 text-amber-900 border border-amber-200"
+          : "bg-emerald-100 text-[#133e27]"
       }`}
     >
       {role}
@@ -229,10 +200,9 @@ export default function BoardMemberTable({ initialMembers }: any) {
   );
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
       {/* Controls */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
-        {/* Search */}
         <div className="relative w-full md:w-1/3">
           <Search
             size={18}
@@ -243,17 +213,16 @@ export default function BoardMemberTable({ initialMembers }: any) {
             placeholder="Search by name or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-2 pl-10 border border-gray-300 rounded-lg"
+            className="w-full p-2.5 pl-10 border border-gray-300 rounded-xl text-xs focus:ring-[#133e27] focus:border-[#133e27]"
           />
         </div>
 
-        {/* Filter & Add Button */}
         <div className="flex space-x-3 w-full md:w-auto justify-end">
           <div className="relative">
             <select
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
-              className="p-2 border border-gray-300 rounded-lg appearance-none bg-white pr-8"
+              className="p-2.5 border border-gray-300 rounded-xl appearance-none bg-white pr-8 text-xs font-semibold"
             >
               {roles.map((r) => (
                 <option key={r} value={r}>
@@ -263,7 +232,7 @@ export default function BoardMemberTable({ initialMembers }: any) {
             </select>
             <ChevronDown
               size={16}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+              className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
             />
           </div>
           <button
@@ -271,28 +240,28 @@ export default function BoardMemberTable({ initialMembers }: any) {
               setEditingMember(null);
               setIsModalOpen(true);
             }}
-            className="py-2 px-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition flex items-center space-x-2"
+            className="py-2.5 px-4 bg-[#133e27] text-white font-bold rounded-xl hover:bg-[#1e4d2b] transition flex items-center space-x-2 text-xs cursor-pointer shadow-md"
           >
-            <UserPlus size={20} /> Add New
+            <UserPlus size={16} /> <span>Add Board Member</span>
           </button>
         </div>
       </div>
 
       {/* Members Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <thead className="bg-[#133e27] text-white">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name / Contact
+              <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider">
+                Member Name & Title
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Role
+              <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider">
+                Board Position
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3.5 text-center text-xs font-bold uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -301,25 +270,22 @@ export default function BoardMemberTable({ initialMembers }: any) {
             {filteredMembers.map((member: any) => (
               <tr
                 key={member.id}
-                className={!member.active ? "bg-gray-50 opacity-80" : ""}
+                className={!member.active ? "bg-gray-50 opacity-80" : "hover:bg-emerald-50/40 transition"}
               >
                 <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                  <p className="font-semibold">
-                    {member.title}. {member.name}
+                  <p className="font-bold text-[#133e27]">
+                    {member.title ? `${member.title} ` : ""}{member.name}
                   </p>
-                  <p className="text-xs text-blue-600">{member.email}</p>
-                  <p className="text-xs text-gray-500">
-                    Joined: {member.joinedDate}
-                  </p>
+                  <p className="text-xs text-gray-600">{member.email}</p>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <RoleBadge role={member.role} />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
-                    className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                    className={`px-3 py-1 text-xs font-bold rounded-full ${
                       member.active
-                        ? "bg-green-100 text-green-800"
+                        ? "bg-emerald-100 text-emerald-800"
                         : "bg-red-100 text-red-800"
                     }`}
                   >
@@ -333,31 +299,25 @@ export default function BoardMemberTable({ initialMembers }: any) {
                       setIsModalOpen(true);
                     }}
                     title="Edit Member Details"
-                    className="text-blue-600 hover:text-blue-800 p-2 rounded-full hover:bg-blue-100 transition"
+                    className="text-[#133e27] hover:text-emerald-900 p-2 rounded-full hover:bg-emerald-100 transition cursor-pointer"
                   >
                     <Edit size={18} />
                   </button>
                   <button
                     onClick={() => handleToggleActive(member.id, member.active)}
-                    title={
-                      member.active ? "Deactivate Account" : "Activate Account"
-                    }
+                    title={member.active ? "Deactivate Account" : "Activate Account"}
                     className={`${
                       member.active
-                        ? "text-orange-500 hover:text-orange-700 hover:bg-orange-100"
-                        : "text-green-500 hover:text-green-700 hover:bg-green-100"
-                    } p-2 rounded-full transition`}
+                        ? "text-amber-600 hover:text-amber-800 hover:bg-amber-100"
+                        : "text-emerald-600 hover:text-emerald-800 hover:bg-emerald-100"
+                    } p-2 rounded-full transition cursor-pointer`}
                   >
-                    {member.active ? (
-                      <ShieldOff size={18} />
-                    ) : (
-                      <ShieldCheck size={18} />
-                    )}
+                    {member.active ? <ShieldOff size={18} /> : <ShieldCheck size={18} />}
                   </button>
                   <button
                     onClick={() => handleDelete(member.id)}
                     title="Delete Member"
-                    className="text-red-600 hover:text-red-800 p-2 rounded-full hover:bg-red-100 transition"
+                    className="text-red-600 hover:text-red-800 p-2 rounded-full hover:bg-red-100 transition cursor-pointer"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -368,7 +328,6 @@ export default function BoardMemberTable({ initialMembers }: any) {
         </table>
       </div>
 
-      {/* Add/Edit Modal */}
       {isModalOpen && (
         <MemberFormModal
           member={editingMember}
@@ -379,3 +338,4 @@ export default function BoardMemberTable({ initialMembers }: any) {
     </div>
   );
 }
+

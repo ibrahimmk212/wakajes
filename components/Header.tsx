@@ -1,145 +1,53 @@
-// // src/components/Header.tsx
-
-// "use client"; // Necessary because it includes the interactive DropdownNav component
-
-// import Link from "next/link";
-// import Image from "next/image";
-// import DropdownNav from "./DropDownNav"; // Import the new component
-
-// export default function Header() {
-//   const paperSubmissionLinks = [
-//     { name: "Online Submission", href: "/paper-submission" },
-//     { name: "Call for Paper", href: "/paper-submission" },
-//     { name: "Indexing", href: "/indexing" },
-//     { name: "Author Section", href: "/author-section" },
-//   ];
-
-//   return (
-//     <header className="sticky top-0 z-50 bg-gray-900 text-white shadow-lg">
-//       <div className="max-w-7xl mx-auto flex items-center justify-between pt-4 pr-4">
-//         {/* Logo and Branding (Left side) */}
-//         <Link href="/" className="flex items-center space-x-2">
-//           {/* LOGO */}
-//           <Image
-//             src="/images/logo.png"
-//             alt="IJASSW"
-//             width={60} // Adjust width to fit your design
-//             height={60}
-//             className="object-contain"
-//           />
-//           <span className="text-xs">
-//             International Journal of Arts and Social Sciences in the world
-//           </span>
-//         </Link>
-
-//         {/* Navigation Links (Right side) */}
-//         <nav className="hidden md:flex items-center space-x-2">
-//           {/* 1. Home */}
-//           <Link href="/" className="py-2 px-3 hover:text-blue-400">
-//             Home
-//           </Link>
-
-//           {/* 2. Paper Submission Dropdown */}
-//           <DropdownNav title="Paper Submission" links={paperSubmissionLinks} />
-
-//           {/* 3. Registration */}
-//           <Link href="/registration" className="py-2 px-3 hover:text-blue-400">
-//             Registration
-//           </Link>
-
-//           {/* 4. Editorial Board */}
-//           <Link
-//             href="/editorial-board"
-//             className="py-2 px-3 hover:text-blue-400"
-//           >
-//             Editorial Board
-//           </Link>
-
-//           {/* 5. Current Edition */}
-//           <Link
-//             href="/current-edition"
-//             className="py-2 px-3 hover:text-blue-400"
-//           >
-//             Current Edition
-//           </Link>
-
-//           {/* 6. Contact Us */}
-//           <Link href="/contact-us" className="py-2 px-3 hover:text-blue-400">
-//             Contact Us
-//           </Link>
-//         </nav>
-
-//         {/* You may also include the Search Bar and ISSN/Impact Factor text here */}
-//       </div>
-//       {/* to the right */}
-//       <div className="justify-end text-right pr-15 pt-0">ISSN: 2992-2879</div>
-//     </header>
-//   );
-// }
-// src/components/Header.tsx
-
-"use client";
-
-import Link from "next/link";
-import Image from "next/image";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import DropdownNav from "./DropDownNav";
-import { useState } from "react";
-import { Menu, X } from "lucide-react"; // Icons for menu open/close
+import { Menu, X, BookOpen } from "lucide-react";
 
-// Helper function to render the navigation links (reused for desktop and mobile)
-// 🎯 FIXED: Defined OUTSIDE of the Header component to avoid "component created during render" error.
 const NavLinks = ({
   paperSubmissionLinks,
   closeMenu,
 }: {
-  paperSubmissionLinks: any;
+  paperSubmissionLinks: { name: string; href: string }[];
   closeMenu: () => void;
 }) => (
   <>
-    {/* 1. Home */}
     <Link
-      href="/"
-      className="py-2 px-3 hover:text-blue-400 block md:inline-block"
+      to="/"
+      className="py-2 px-3 text-white hover:text-[#d4af37] font-medium transition block md:inline-block"
       onClick={closeMenu}
     >
       Home
     </Link>
 
-    {/* 2. Paper Submission Dropdown */}
-    {/* DropdownNav should manage its own state for closing */}
     <DropdownNav title="Paper Submission" links={paperSubmissionLinks} />
 
-    {/* 3. Registration */}
     <Link
-      href="/registration"
-      className="py-2 px-3 hover:text-blue-400 block md:inline-block"
+      to="/registration"
+      className="py-2 px-3 text-white hover:text-[#d4af37] font-medium transition block md:inline-block"
       onClick={closeMenu}
     >
-      Registration
+      Registration & Fees
     </Link>
 
-    {/* 4. Editorial Board */}
     <Link
-      href="/editorial-board"
-      className="py-2 px-3 hover:text-blue-400 block md:inline-block"
+      to="/editorial-board"
+      className="py-2 px-3 text-white hover:text-[#d4af37] font-medium transition block md:inline-block"
       onClick={closeMenu}
     >
       Editorial Board
     </Link>
 
-    {/* 5. Current Edition */}
     <Link
-      href="/current-edition"
-      className="py-2 px-3 hover:text-blue-400 block md:inline-block"
+      to="/current-edition"
+      className="py-2 px-3 text-white hover:text-[#d4af37] font-medium transition block md:inline-block"
       onClick={closeMenu}
     >
       Current Edition
     </Link>
 
-    {/* 6. Contact Us */}
     <Link
-      href="/contact-us"
-      className="py-2 px-3 hover:text-blue-400 block md:inline-block"
+      to="/contact-us"
+      className="py-2 px-3 text-white hover:text-[#d4af37] font-medium transition block md:inline-block"
       onClick={closeMenu}
     >
       Contact Us
@@ -153,39 +61,58 @@ export default function Header() {
 
   const paperSubmissionLinks = [
     { name: "Online Submission", href: "/paper-submission" },
-    { name: "Call for Paper", href: "/paper-submission" },
-    { name: "Indexing", href: "/indexing" },
-    { name: "Author Section", href: "/author-section" },
+    { name: "Submission Guidelines", href: "/paper-submission#guidelines" },
+    { name: "Indexing & Scope", href: "/indexing" },
+    { name: "Author Guidelines", href: "/author-section" },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-gray-900 text-white shadow-lg">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
-        {" "}
-        {/* Adjusted padding */}
-        {/* Logo and Branding (Left side) */}
-        <Link href="/" className="flex items-center space-x-2">
-          <Image
-            src="/images/logo.png"
-            alt="IJASSW"
-            width={60}
-            height={60}
-            className="object-contain"
-          />
-          <span className="text-xs max-w-[200px] leading-tight hidden sm:block">
-            International Journal of Arts and Social Sciences in the world
+    <header className="sticky top-0 z-50 bg-[#133e27] text-white shadow-xl border-b-2 border-[#d4af37]">
+      {/* Top Banner Bar */}
+      <div className="bg-[#081c15] text-[#d4af37] text-xs py-1 px-4 border-b border-[#1e4d2b]">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <span className="font-semibold tracking-wide">
+            COLLEGE OF EDUCATION, WAKA-BIU, BORNO STATE
           </span>
+          <div className="flex items-center space-x-4 font-mono">
+            <span className="bg-[#1e4d2b] px-2 py-0.5 rounded text-white font-bold">
+              Vol. 4 No. 3
+            </span>
+            <span>ISSN: 1597-5118</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header Content */}
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+        {/* Logo and Branding */}
+        <Link to="/" className="flex items-center space-x-3 group">
+          <img
+            src="/images/logo.png"
+            alt="WAKAJES Logo"
+            className="w-14 h-14 object-contain rounded-full bg-white p-1 shadow-md border-2 border-[#d4af37]"
+          />
+          <div>
+            <span className="text-xl font-extrabold tracking-tight text-white block leading-tight group-hover:text-[#d4af37] transition">
+              WAKAJES
+            </span>
+            <span className="text-xs text-gray-200 font-medium block max-w-xs leading-tight">
+              Waka Journal of Educational Studies
+            </span>
+          </div>
         </Link>
-        {/* Navigation Links (Right side) - Hidden on small screens */}
-        <nav className="hidden md:flex items-center space-x-2">
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-1">
           <NavLinks
             paperSubmissionLinks={paperSubmissionLinks}
             closeMenu={closeMenu}
           />
         </nav>
-        {/* Mobile Menu Button (Visible on small screens) */}
+
+        {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-white p-2"
+          className="md:hidden text-white p-2 cursor-pointer focus:outline-none"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle navigation menu"
         >
@@ -193,23 +120,18 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile Navigation Container (Appears conditionally below header) */}
+      {/* Mobile Navigation Dropdown */}
       <div
-        className={`md:hidden bg-gray-800 transition-all duration-300 ease-in-out overflow-hidden ${
-          isMenuOpen ? "max-h-96 opacity-100 py-2" : "max-h-0 opacity-0"
+        className={`md:hidden bg-[#081c15] border-t border-[#1e4d2b] transition-all duration-300 ease-in-out overflow-hidden ${
+          isMenuOpen ? "max-h-96 opacity-100 py-3" : "max-h-0 opacity-0"
         }`}
       >
-        <nav className="flex flex-col px-4 space-y-1">
+        <nav className="flex flex-col px-4 space-y-2">
           <NavLinks
             paperSubmissionLinks={paperSubmissionLinks}
             closeMenu={closeMenu}
           />
         </nav>
-      </div>
-
-      {/* ISSN Display (Always visible, but adjust positioning) */}
-      <div className="max-w-7xl mx-auto text-xs text-right text-gray-400 pr-4 pb-2 md:pb-3">
-        ISSN: 2992-2879
       </div>
     </header>
   );

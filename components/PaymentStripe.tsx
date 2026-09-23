@@ -1,8 +1,8 @@
-// src/components/PaymentStripe.tsx
-import Link from "next/link";
+import React from "react";
+import { Link } from "react-router-dom";
 
 export default function PaymentStripe() {
-  const fees = [50, 40, 30]; // Example fees in USD
+  const fees = [50, 40, 30];
 
   return (
     <section>
@@ -13,10 +13,9 @@ export default function PaymentStripe() {
 
       <div className="flex flex-wrap gap-4">
         {fees.map((fee) => (
-          // In a real application, this link would trigger a server-side function
           <Link
             key={fee}
-            href={`/api/checkout?amount=${fee}&currency=USD`}
+            to={`/registration?amount=${fee}&currency=USD`}
             className="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 text-center"
           >
             Pay USD ${fee}

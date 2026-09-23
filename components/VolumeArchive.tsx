@@ -1,6 +1,5 @@
-// src/components/VolumeArchive.tsx
 import React from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 interface Issue {
   issue: number;
@@ -28,8 +27,7 @@ const VolumeArchive: React.FC<VolumeArchiveProps> = ({
         {issues.map((issue) => (
           <div key={`${volume}-${issue.issue}`} className="text-sm">
             <Link
-              // href={`/archive/${year}/${issue.issue}`}
-              href={`#`}
+              to={`/archives`}
               className="text-gray-700 hover:text-blue-500 hover:underline"
             >
               Vol {volume}, Issue {issue.issue}, {issue.month} {year}
@@ -40,4 +38,5 @@ const VolumeArchive: React.FC<VolumeArchiveProps> = ({
     </div>
   );
 };
+
 export default VolumeArchive;
