@@ -237,6 +237,11 @@ app.get('/api/admin/submissions', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`[WAKAJES API Server] Running on http://localhost:${PORT}`);
-});
+export default app;
+
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`[WAKAJES API Server] Running on http://localhost:${PORT}`);
+  });
+}
+
